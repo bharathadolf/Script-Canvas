@@ -12,31 +12,36 @@ import {
   ChevronRight, 
   Clock, 
   Sparkles,
-  Layers
+  Layers,
+  LogOut
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import { useAuth, useUser } from '@/firebase';
+import { signOut } from 'firebase/auth';
 
 type SidebarItemProps = {
   icon: React.ElementType;
   label: string;
   active?: boolean;
   onClick?: () => void;
+  variant?: 'default' | 'danger';
 };
 
-const SidebarItem = ({ icon: Icon, label, active, onClick }: SidebarItemProps) => (
+const SidebarItem = ({ icon: Icon, label, active, onClick, variant = 'default' }: SidebarItemProps) => (
   <button
     onClick={onClick}
     className={cn(
       "flex items-center gap-3 w-full px-4 py-2.5 rounded-lg transition-all duration-200 group text-sm font-medium",
       active 
         ? "bg-primary text-primary-foreground shadow-lg" 
-        : "text-muted-foreground hover:bg-muted hover:text-primary"
+        : variant === 'danger'
+          ? "text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+          : "text-muted-foreground hover:bg-muted hover:text-primary"
     )}
   >
-    <Icon className={cn("w-4 h-4", active ? "text-primary-foreground" : "text-primary group-hover:scale-110 transition-transform")} />
+    <Icon className={cn("w-4 h-4", active ? "text-primary-foreground" : variant === 'danger' ? "text-destructive" : "text-primary group-hover:scale-110 transition-transform")} />
     <span>{label}</span>
   </button>
 );
@@ -52,6 +57,13 @@ export function AppLayout({
   setActiveSection: (s: string) => void;
   contextPanel?: React.ReactNode;
 }) {
+  const auth = useAuth();
+  const { user } = useUser();
+
+  const handleSignOut = () => {
+    signOut(auth);
+  };
+
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Column 1: Navigation Sidebar */}
@@ -113,12 +125,25 @@ export function AppLayout({
         <div className="mt-auto p-4 space-y-4">
           <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
             <div className="flex items-center gap-2 text-primary mb-2">
-              <Sparkles className="w-3 h-3" />
-              <span className="text-[10px] font-bold uppercase tracking-wider">AI Assistant Ready</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider truncate max-w-[120px]">
+                {user?.email || 'Authenticated'}
+              </span>
             </div>
-            <p className="text-[11px] text-muted-foreground mb-3 leading-relaxed">Need a twist? Ask the Muse in the context panel.</p>
+            <SidebarItem icon={Settings} label="Settings" />
+            <SidebarItem 
+              icon={LogOut} 
+              label="Sign Out" 
+              variant="danger" 
+              onClick={handleSignOut} 
+            />
           </div>
-          <SidebarItem icon={Settings} label="Settings" />
+          <div className="bg-primary/5 rounded-xl p-4 border border-primary/10">
+            <div className="flex items-center gap-2 text-primary mb-2">
+              <Sparkles className="w-3 h-3" />
+              <span className="text-[10px] font-bold uppercase tracking-wider">AI Muse Ready</span>
+            </div>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">Consult the context panel for suggestions.</p>
+          </div>
         </div>
       </aside>
 
