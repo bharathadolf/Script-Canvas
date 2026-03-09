@@ -20,7 +20,7 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
 
-  // Directly return the loader if Firebase is still determining the auth state
+  // Determine auth state as fast as possible
   if (isUserLoading) {
     return <Loading />;
   }
