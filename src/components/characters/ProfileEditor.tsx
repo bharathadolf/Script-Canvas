@@ -5,7 +5,6 @@ import React from 'react';
 import { useProjectStore } from '@/lib/store';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Plus, User, FileText, Target, MapPin, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -53,11 +52,10 @@ export function ProfileEditor({ type }: { type: 'characters' | 'world' }) {
                 ) : (
                   <MapPin className="w-12 h-12 text-primary opacity-20" />
                 )}
-                <Image 
+                <img 
                   src={type === 'characters' ? 'https://picsum.photos/seed/char1/200/200' : 'https://picsum.photos/seed/loc1/200/200'}
                   alt={item.name}
-                  fill
-                  className="object-cover opacity-60 group-hover:opacity-100 transition-opacity"
+                  className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity"
                 />
               </div>
               <div className="flex-1 p-6 space-y-4">
@@ -100,7 +98,3 @@ export function ProfileEditor({ type }: { type: 'characters' | 'world' }) {
     </div>
   );
 }
-
-const Image = ({ src, alt, fill, className }: any) => (
-  <img src={src} alt={alt} className={cn(className, fill ? "absolute inset-0 w-full h-full" : "")} />
-);

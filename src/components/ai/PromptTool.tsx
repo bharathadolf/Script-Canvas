@@ -9,6 +9,7 @@ import { aiCharacterWorldSuggester } from '@/ai/flows/ai-character-world-suggest
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
 
 export function PromptTool() {
   const [prompt, setPrompt] = useState('');
@@ -95,7 +96,3 @@ export function PromptTool() {
     </div>
   );
 }
-
-const Separator = ({ className }: { className?: string }) => (
-  <div className={cn("h-px bg-border", className)} />
-);
