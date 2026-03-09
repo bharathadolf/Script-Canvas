@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useUser } from '@/firebase';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { ProjectWorkspace } from '@/components/layout/ProjectWorkspace';
@@ -19,20 +19,13 @@ export default function Home() {
   const { user, isUserLoading } = useUser();
   const [activeSection, setActiveSection] = useState('dashboard');
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
-  
-  const [isTransitioning, setIsTransitioning] = useState(true);
 
-  useEffect(() => {
-    if (!isUserLoading) {
-      const timer = setTimeout(() => setIsTransitioning(false), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isUserLoading]);
-
-  if (isUserLoading || isTransitioning) {
+  // Directly return the loader if Firebase is still determining the auth state
+  if (isUserLoading) {
     return <Loading />;
   }
 
+  // If no user is authenticated, show the Landing Page
   if (!user) {
     return (
       <>
@@ -48,7 +41,7 @@ export default function Home() {
   };
 
   const renderContent = () => {
-    // Helper to wrap project-specific views with the side panel tools
+    // Helper to wrap project-specific views with the side panel tools (Muse AI & Details)
     const wrapInWorkspace = (content: React.ReactNode) => (
       <ProjectWorkspace>{content}</ProjectWorkspace>
     );
