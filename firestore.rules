@@ -1,0 +1,101 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * SCRIPT CANVAS SECURITY RULES
+     * 
+     * CORE PHILOSOPHY:
+     * This ruleset implements a strict Ownership-Based Access Control model. All application data 
+     * is architecturally segregated under a top-level /users/{userId} hierarchy. This ensures 
+     * that a user's data is logically and securely isolated from others.
+     * 
+     * DATA STRUCTURE:
+     * - /users/{userId}: Root user profile.
+     * - /users/{userId}/projects/{projectId}: Creative projects (screenplays, novels, etc.).
+     * - Subcollections: Scenes, Characters, Locations, WorldElements, and PlotPoints are nested 
+     *   directly under the specific project they belong to.
+     * 
+     * KEY SECURITY DECISIONS:
+     * 1. Authorization Independence: Every document in a subcollection denormalizes the 'userId' 
+     *    and 'projectId'. This allows security rules to verify access using the document's own 
+     *    data and the path variables, completely avoiding expensive and slow 'get()' lookups.
+     * 2. Path-Identity Consistency: For all write operations, the rules enforce that internal 
+     *    linkage fields (userId, projectId) match the variables in the document path.
+     * 3. Prototyping Flexibility: These rules enforce "who" can write but are flexible on 
+     *    "what" is written. We validate relational links (IDs) but do not enforce strict 
+     *    field types or required content schemas to allow for rapid UI/UX iteration.
+     * 4. Deny-by-Default: Any request not explicitly matching an 'allow' statement is rejected.
+     */
+
+    // --- Helper Functions ---
+
+    /** @description Checks if the user is authenticated with Firebase Auth. */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /** @description Checks if the authenticated user's UID matches the provided userId. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /** @description Combined check for existence and ownership, used for updates and deletes. */
+    function isExistingOwner(userId) {
+      return resource != null && isOwner(userId);
+    }
+
+    /** @description Validates that the userId in the document data remains consistent and matches the path. */
+    function hasValidUserLink(userId) {
+      return request.resource.data.userId == userId;
+    }
+
+    /** @description Validates that the projectId in the document data remains consistent and matches the path. */
+    function hasValidProjectLink(projectId) {
+      return request.resource.data.projectId == projectId;
+    }
+
+    // --- Collection Rules ---
+
+    /**
+     * @description Rules for the root User profile. Users can only access their own profile.
+     * @path /users/{userId}
+     * @allow (create) if the authenticated user's UID matches the userId in the path.
+     * @deny (list) if a user tries to query all user profiles.
+     * @principle Self-creation and strict user isolation.
+     */
+    match /users/{userId} {
+      allow get, list: if isOwner(userId);
+      allow create: if isOwner(userId);
+      allow update, delete: if isExistingOwner(userId);
+
+      /**
+       * @description Rules for Projects. Owned by the user specified in the path.
+       * @path /users/{userId}/projects/{projectId}
+       * @allow (create) if auth UID matches path AND userId field in project data matches path.
+       * @deny (update) if the project belongs to a different user.
+       * @principle Relational integrity between path variables and document content.
+       */
+      match /projects/{projectId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && hasValidUserLink(userId);
+        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(userId);
+
+        /**
+         * @description Unified rule for project sub-entities (Scenes, Characters, Locations, etc.).
+         * @path /users/{userId}/projects/{projectId}/{collection}/{id}
+         * @allow (create) if auth UID matches path AND userId/projectId fields match path.
+         * @deny (update) if attempting to change the parent project ID or owner ID.
+         * @principle Denormalization for Authorization Independence.
+         */
+        match /{collection}/{id} {
+          allow get, list: if isOwner(userId);
+          allow create: if isOwner(userId) && hasValidUserLink(userId) && hasValidProjectLink(projectId);
+          allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId && request.resource.data.projectId == resource.data.projectId;
+          allow delete: if isExistingOwner(userId);
+        }
+      }
+    }
+  }
+}

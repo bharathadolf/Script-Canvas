@@ -1,0 +1,531 @@
+{
+  "entities": {
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user account in the Script Canvas application. This entity stores core user profile information and is linked to the projects they create.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity."
+        },
+        "username": {
+          "type": "string",
+          "description": "A unique, user-friendly name chosen by the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address, used for account recovery and communication.",
+          "format": "email"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The timestamp when the user account was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The timestamp when the user account was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "username",
+        "email",
+        "createdAt"
+      ]
+    },
+    "Project": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Project",
+      "type": "object",
+      "description": "Represents a creative story project, such as a screenplay, novel, or short story, created by a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Project entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to the User who owns this project. (Relationship: User 1:N Project)"
+        },
+        "title": {
+          "type": "string",
+          "description": "The main title of the story project."
+        },
+        "logline": {
+          "type": "string",
+          "description": "A concise one-sentence summary of the project's core conflict."
+        },
+        "synopsis": {
+          "type": "string",
+          "description": "A brief summary of the project's plot and themes."
+        },
+        "genre": {
+          "type": "string",
+          "description": "The genre of the story project (e.g., 'Sci-Fi', 'Fantasy', 'Drama')."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current development status of the project (e.g., 'Draft', 'In Progress', 'Completed')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The timestamp when the project was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The timestamp when the project was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "title",
+        "createdAt"
+      ]
+    },
+    "Scene": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Scene",
+      "type": "object",
+      "description": "Represents an individual scene within a story project, containing its content and metadata.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Scene entity."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Reference to the Project this scene belongs to. (Relationship: Project 1:N Scene)"
+        },
+        "title": {
+          "type": "string",
+          "description": "A brief descriptive title for the scene."
+        },
+        "content": {
+          "type": "string",
+          "description": "The actual script or narrative text for the scene."
+        },
+        "orderIndex": {
+          "type": "number",
+          "description": "The chronological order index of the scene within its project."
+        },
+        "sceneType": {
+          "type": "string",
+          "description": "The type of scene (e.g., 'Action', 'Dialogue', 'Transition', 'Montage')."
+        },
+        "locationIds": {
+          "type": "array",
+          "description": "References to Locations featured in this scene. (Relationship: Scene N:N Location)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "characterIds": {
+          "type": "array",
+          "description": "References to Characters present in this scene. (Relationship: Scene N:N Character)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes or ideas for the scene."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The timestamp when the scene was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The timestamp when the scene was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "projectId",
+        "title",
+        "content",
+        "orderIndex",
+        "createdAt"
+      ]
+    },
+    "Character": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Character",
+      "type": "object",
+      "description": "Represents a character within a story project, detailing their profile, backstory, and motivations.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Character entity."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Reference to the Project this character belongs to. (Relationship: Project 1:N Character)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The full name of the character."
+        },
+        "archetype": {
+          "type": "string",
+          "description": "The character's archetype (e.g., 'Hero', 'Villain', 'Mentor', 'Sidekick')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A physical description and personality overview of the character."
+        },
+        "backstory": {
+          "type": "string",
+          "description": "The character's past experiences and history."
+        },
+        "motivations": {
+          "type": "string",
+          "description": "The driving forces behind the character's actions."
+        },
+        "goals": {
+          "type": "string",
+          "description": "What the character aims to achieve in the story."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes or ideas about the character."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The timestamp when the character profile was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The timestamp when the character profile was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "projectId",
+        "name",
+        "createdAt"
+      ]
+    },
+    "Location": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Location",
+      "type": "object",
+      "description": "Represents a specific setting or place within a story project's world.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Location entity."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Reference to the Project this location belongs to. (Relationship: Project 1:N Location)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the location."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the location, including sensory details."
+        },
+        "type": {
+          "type": "string",
+          "description": "The classification of the location (e.g., 'Indoor', 'Outdoor', 'Fantasy City', 'Spaceship')."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes or ideas about the location."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The timestamp when the location was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The timestamp when the location was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "projectId",
+        "name",
+        "createdAt"
+      ]
+    },
+    "WorldElement": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "WorldElement",
+      "type": "object",
+      "description": "Represents an abstract or conceptual element of a story project's world-building (e.g., magic systems, historical events, political structures).",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the WorldElement entity."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Reference to the Project this world element belongs to. (Relationship: Project 1:N WorldElement)"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name or title of the world element."
+        },
+        "type": {
+          "type": "string",
+          "description": "The classification of the world element (e.g., 'Magic System', 'Faction', 'Historical Event', 'Technology')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed explanation of the world element and its implications."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes or ideas about the world element."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The timestamp when the world element was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The timestamp when the world element was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "projectId",
+        "name",
+        "createdAt"
+      ]
+    },
+    "PlotPoint": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PlotPoint",
+      "type": "object",
+      "description": "Represents a significant event or turning point in a story project's narrative, used for timeline visualization.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the PlotPoint entity."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "Reference to the Project this plot point belongs to. (Relationship: Project 1:N PlotPoint)"
+        },
+        "title": {
+          "type": "string",
+          "description": "A concise title for the plot point."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of what happens at this plot point and its significance."
+        },
+        "timelinePosition": {
+          "type": "number",
+          "description": "The chronological position of the plot point on the narrative timeline."
+        },
+        "sceneIds": {
+          "type": "array",
+          "description": "References to Scenes associated with this plot point. (Relationship: PlotPoint N:N Scene)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "The timestamp when the plot point was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The timestamp when the plot point was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "projectId",
+        "title",
+        "description",
+        "timelinePosition",
+        "createdAt"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores individual user profiles. Access is strictly restricted to the authenticated user (`request.auth.uid`) matching the `userId` in the path."
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}",
+        "definition": {
+          "entityName": "Project",
+          "schema": {
+            "$ref": "#/backend/entities/Project"
+          },
+          "description": "Stores user-owned creative projects. The `userId` field within the document must match the `userId` in the path and `request.auth.uid` for authorization.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the project, matching `request.auth.uid`."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier for a specific project."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}/scenes/{sceneId}",
+        "definition": {
+          "entityName": "Scene",
+          "schema": {
+            "$ref": "#/backend/entities/Scene"
+          },
+          "description": "Stores individual scenes belonging to a specific project. Includes denormalized `userId` from the parent project for authorization independence and `projectId` for direct linking.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the project and, by extension, this scene. Denormalized for security rules."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier of the project this scene belongs to."
+            },
+            {
+              "name": "sceneId",
+              "description": "The unique identifier for a specific scene."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}/characters/{characterId}",
+        "definition": {
+          "entityName": "Character",
+          "schema": {
+            "$ref": "#/backend/entities/Character"
+          },
+          "description": "Stores character profiles for a specific project. Includes denormalized `userId` from the parent project for authorization independence and `projectId` for direct linking.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the project and this character. Denormalized for security rules."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier of the project this character belongs to."
+            },
+            {
+              "name": "characterId",
+              "description": "The unique identifier for a specific character."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}/locations/{locationId}",
+        "definition": {
+          "entityName": "Location",
+          "schema": {
+            "$ref": "#/backend/entities/Location"
+          },
+          "description": "Stores location details for a specific project. Includes denormalized `userId` from the parent project for authorization independence and `projectId` for direct linking.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the project and this location. Denormalized for security rules."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier of the project this location belongs to."
+            },
+            {
+              "name": "locationId",
+              "description": "The unique identifier for a specific location."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}/worldElements/{worldElementId}",
+        "definition": {
+          "entityName": "WorldElement",
+          "schema": {
+            "$ref": "#/backend/entities/WorldElement"
+          },
+          "description": "Stores world-building elements for a specific project. Includes denormalized `userId` from the parent project for authorization independence and `projectId` for direct linking.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the project and this world element. Denormalized for security rules."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier of the project this world element belongs to."
+            },
+            {
+              "name": "worldElementId",
+              "description": "The unique identifier for a specific world element."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/users/{userId}/projects/{projectId}/plotPoints/{plotPointId}",
+        "definition": {
+          "entityName": "PlotPoint",
+          "schema": {
+            "$ref": "#/backend/entities/PlotPoint"
+          },
+          "description": "Stores plot points for a project's timeline visualization. Includes denormalized `userId` from the parent project for authorization independence and `projectId` for direct linking.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user who owns the project and this plot point. Denormalized for security rules."
+            },
+            {
+              "name": "projectId",
+              "description": "The unique identifier of the project this plot point belongs to."
+            },
+            {
+              "name": "plotPointId",
+              "description": "The unique identifier for a specific plot point."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The recommended Firestore structure is designed to adhere strictly to the core design principles of Authorization Independence, Structural Segregation, and Access Modeling, ensuring a secure, scalable, and debuggable database.\n\n**Authorization Independence (Denormalization Strategy):**\nEach subcollection document (`Scene`, `Character`, `Location`, `WorldElement`, `PlotPoint`) will denormalize the `userId` from its parent `Project` and the owning `User`. This means that every document in these subcollections will explicitly contain a `userId` field that matches the `userId` present in the document's path (e.g., `projects/{userId}/projects/{projectId}/scenes/{sceneId}` will have `scene.userId` == `userId`). This eliminates the need for `get()` calls in security rules, as authorization can be verified solely by checking `request.auth.uid == resource.data.userId` for any document. This allows for atomic writes and updates across projects and their sub-entities without complex rule dependencies, making transactions and batch operations simpler and more reliable.\n\nFor example, to create a new scene for a project, the client would write to `/users/{current_uid}/projects/{projectId}/scenes/{sceneId}`. The scene document itself would contain `userId: current_uid` and `projectId: projectId`. The security rule would simply verify `request.auth.uid == resource.data.userId` and potentially `resource.data.projectId == projectId` (though the path itself already implies this).\n\n**Structural Segregation and QAPs (Query as Authorization Predicate):**\nAll data is segregated by user (`/users/{userId}/...`), ensuring that one user's data is never mixed with another's. Within a user's tree, project-specific data is further segregated into subcollections (e.g., `/users/{userId}/projects/{projectId}/scenes`). This homogeneous security posture means all documents within a given collection or subcollection share the same authorization requirements – they are owned by the `userId` in the path. This simplifies security rules significantly, as a single rule can apply to an entire collection, focusing on `request.auth.uid` matching the `userId` in the path and/or the denormalized `userId` field within the document.\n\nThis structure inherently supports QAPs. When a user queries for their projects (e.g., `db.collection('users/{userId}/projects')`), the `userId` in the path naturally filters the data to only documents belonging to the authenticated user. Similarly, when querying for scenes within a project (e.g., `db.collection('users/{userId}/projects/{projectId}/scenes')`), the path constraint, combined with the denormalized `userId` in the scene documents, provides robust and efficient security without requiring server-side filtering after data retrieval. This guarantees that `list` operations are secure and only return data the user is authorized to see, directly aligning with the QAPs principle."
+  }
+}
