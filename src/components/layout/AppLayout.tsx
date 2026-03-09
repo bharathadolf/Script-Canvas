@@ -18,9 +18,9 @@ import {
   Shield,
   Bell,
   Palette,
-  Eye,
   EyeOff,
-  Type
+  Cloud,
+  CheckCircle2
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -80,6 +80,7 @@ export function AppLayout({
   const { user } = useUser();
   const { settings, updateSettings } = useSettings();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [activeSettingsTab, setActiveSettingsTab] = useState<'profile' | 'appearance' | 'notifications' | 'security'>('profile');
 
   const handleSignOut = () => {
     signOut(auth);
@@ -159,7 +160,10 @@ export function AppLayout({
               <SidebarItem 
                 icon={SettingsIcon} 
                 label="Settings" 
-                onClick={() => setIsSettingsOpen(true)} 
+                onClick={() => {
+                  setIsSettingsOpen(true);
+                  setActiveSettingsTab('profile');
+                }} 
               />
               <SidebarItem 
                 icon={LogOut} 
@@ -217,7 +221,7 @@ export function AppLayout({
 
       {/* Settings Dialog */}
       <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
-        <DialogContent className="max-w-2xl bg-card border-border/40">
+        <DialogContent className="max-w-3xl bg-card border-border/40">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary flex items-center gap-2">
               <SettingsIcon className="w-6 h-6" /> Studio Settings
@@ -227,89 +231,174 @@ export function AppLayout({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="grid grid-cols-4 gap-6 mt-6">
-            <aside className="col-span-1 space-y-1">
-              <Button variant="ghost" className="w-full justify-start gap-2 bg-muted/50 text-primary">
+          <div className="grid grid-cols-4 gap-6 mt-6 min-h-[400px]">
+            <aside className="col-span-1 space-y-1 border-r pr-4">
+              <Button 
+                variant="ghost" 
+                className={cn("w-full justify-start gap-2", activeSettingsTab === 'profile' ? "bg-muted text-primary" : "text-muted-foreground")}
+                onClick={() => setActiveSettingsTab('profile')}
+              >
                 <User className="w-4 h-4" /> Profile
               </Button>
-              <Button variant="ghost" className="w-full justify-start gap-2 text-muted-foreground">
+              <Button 
+                variant="ghost" 
+                className={cn("w-full justify-start gap-2", activeSettingsTab === 'appearance' ? "bg-muted text-primary" : "text-muted-foreground")}
+                onClick={() => setActiveSettingsTab('appearance')}
+              >
                 <Palette className="w-4 h-4" /> Appearance
               </Button>
-              <Button variant="ghost" className="w-full justify-start gap-2 text-muted-foreground">
+              <Button 
+                variant="ghost" 
+                className={cn("w-full justify-start gap-2", activeSettingsTab === 'notifications' ? "bg-muted text-primary" : "text-muted-foreground")}
+                onClick={() => setActiveSettingsTab('notifications')}
+              >
                 <Bell className="w-4 h-4" /> Notifications
               </Button>
-              <Button variant="ghost" className="w-full justify-start gap-2 text-muted-foreground">
+              <Button 
+                variant="ghost" 
+                className={cn("w-full justify-start gap-2", activeSettingsTab === 'security' ? "bg-muted text-primary" : "text-muted-foreground")}
+                onClick={() => setActiveSettingsTab('security')}
+              >
                 <Shield className="w-4 h-4" /> Security
               </Button>
             </aside>
 
             <div className="col-span-3 space-y-6">
-              <div className="space-y-4">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Workspace Profile</h3>
-                <div className="grid gap-4 p-4 rounded-xl bg-muted/20 border">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-sm font-medium">Account Type</p>
-                      <p className="text-xs text-muted-foreground">{user?.isAnonymous ? 'Guest Scribe' : 'Professional Member'}</p>
+              {activeSettingsTab === 'profile' && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Workspace Profile</h3>
+                  <div className="grid gap-4 p-4 rounded-xl bg-muted/20 border">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-sm font-medium">Account Type</p>
+                        <p className="text-xs text-muted-foreground">{user?.isAnonymous ? 'Guest Scribe' : 'Professional Member'}</p>
+                      </div>
+                      <Badge variant="outline" className="text-[10px]">{user?.isAnonymous ? 'FREE' : 'PRO'}</Badge>
+                    </div>
+                    <Separator />
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-sm font-medium">Identifier</p>
+                        <p className="text-xs text-muted-foreground truncate max-w-[250px]">{user?.email || user?.uid}</p>
+                      </div>
                     </div>
                   </div>
-                  <Separator />
-                  <div className="flex justify-between items-center">
+                  
+                  <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 flex items-start gap-3">
+                    <Cloud className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium">Identifier</p>
-                      <p className="text-xs text-muted-foreground truncate max-w-[200px]">{user?.email || user?.uid}</p>
+                      <p className="text-xs font-bold text-primary uppercase">Cloud Synchronization</p>
+                      <p className="text-[11px] text-muted-foreground">Your scripts are automatically backed up to our secure story servers.</p>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              <div className="space-y-4">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Editor Preferences</h3>
-                <div className="grid gap-4 p-4 rounded-xl bg-muted/20 border">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-medium">Focus Mode</p>
-                      <p className="text-[10px] text-muted-foreground italic">Hides sidebars while editing scripts.</p>
+              {activeSettingsTab === 'appearance' && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Editor Appearance</h3>
+                  <div className="grid gap-4 p-4 rounded-xl bg-muted/20 border">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <p className="text-sm font-medium">Focus Mode</p>
+                        <p className="text-[10px] text-muted-foreground italic">Hides UI elements while editing scripts.</p>
+                      </div>
+                      <Switch 
+                        checked={settings.focusMode} 
+                        onCheckedChange={(val) => updateSettings({ focusMode: val })} 
+                      />
                     </div>
-                    <Switch 
-                      checked={settings.focusMode} 
-                      onCheckedChange={(val) => updateSettings({ focusMode: val })} 
-                    />
-                  </div>
-                  <Separator />
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-medium">Writing Font</p>
-                      <p className="text-[10px] text-muted-foreground italic">Choose your preferred script typeface.</p>
+                    <Separator />
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <p className="text-sm font-medium">Writing Font</p>
+                        <p className="text-[10px] text-muted-foreground italic">Choose your preferred script typeface.</p>
+                      </div>
+                      <Select 
+                        value={settings.writingFont} 
+                        onValueChange={(val: WritingFont) => updateSettings({ writingFont: val })}
+                      >
+                        <SelectTrigger className="w-[160px] h-8 text-xs">
+                          <SelectValue placeholder="Select Font" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="sans">Modern Sans</SelectItem>
+                          <SelectItem value="serif">Classic Serif</SelectItem>
+                          <SelectItem value="mono">Typewriter Mono</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                    <Select 
-                      value={settings.writingFont} 
-                      onValueChange={(val: WritingFont) => updateSettings({ writingFont: val })}
-                    >
-                      <SelectTrigger className="w-[140px] h-8 text-xs">
-                        <SelectValue placeholder="Select Font" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="sans">Modern Sans</SelectItem>
-                        <SelectItem value="serif">Classic Serif</SelectItem>
-                        <SelectItem value="mono">Typewriter Mono</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Separator />
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">Auto-save</p>
-                    <Switch 
-                      checked={settings.autoSave} 
-                      onCheckedChange={(val) => updateSettings({ autoSave: val })} 
-                    />
+                    <Separator />
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <p className="text-sm font-medium">Auto-save</p>
+                        <p className="text-[10px] text-muted-foreground italic">Save changes every 30 seconds.</p>
+                      </div>
+                      <Switch 
+                        checked={settings.autoSave} 
+                        onCheckedChange={(val) => updateSettings({ autoSave: val })} 
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {activeSettingsTab === 'notifications' && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Alerts & Notifications</h3>
+                  <div className="flex flex-col items-center justify-center h-48 bg-muted/10 border border-dashed rounded-xl text-center p-8">
+                    <Bell className="w-8 h-8 text-muted-foreground mb-3 opacity-20" />
+                    <p className="text-sm font-medium text-muted-foreground">Notification preferences coming soon.</p>
+                    <p className="text-[11px] text-muted-foreground/60 mt-1 italic">We'll let you know when collaborations are ready.</p>
+                  </div>
+                </div>
+              )}
+
+              {activeSettingsTab === 'security' && (
+                <div className="space-y-4 animate-in fade-in slide-in-from-right-2 duration-300">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Account Security</h3>
+                  <div className="grid gap-4 p-4 rounded-xl bg-muted/20 border">
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <p className="text-sm font-medium">Two-Factor Auth</p>
+                        <p className="text-[10px] text-muted-foreground italic">Add an extra layer of story protection.</p>
+                      </div>
+                      <Button variant="outline" size="sm" className="h-7 text-[10px] uppercase font-bold" disabled>Setup</Button>
+                    </div>
+                    <Separator />
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <p className="text-sm font-medium">Active Sessions</p>
+                        <p className="text-[10px] text-muted-foreground italic">Manage your currently logged in devices.</p>
+                      </div>
+                      <span className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-500 uppercase">
+                        <CheckCircle2 className="w-3 h-3" /> This device active
+                      </span>
+                    </div>
+                  </div>
+                  <div className="pt-4">
+                    <Button variant="ghost" className="text-destructive hover:bg-destructive/10 hover:text-destructive text-xs gap-2" onClick={handleSignOut}>
+                      <LogOut className="w-4 h-4" /> Sign Out from All Devices
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+function Badge({ children, variant = "default", className }: { children: React.ReactNode, variant?: "default" | "outline", className?: string }) {
+  return (
+    <span className={cn(
+      "px-2 py-0.5 rounded-full font-bold uppercase tracking-widest",
+      variant === "default" ? "bg-primary text-primary-foreground" : "border border-border text-muted-foreground",
+      className
+    )}>
+      {children}
+    </span>
   );
 }
