@@ -1,6 +1,7 @@
+
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useUser } from '@/firebase';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { ProjectDashboard } from '@/components/projects/ProjectDashboard';
@@ -17,12 +18,25 @@ export default function Home() {
   const { user, isUserLoading } = useUser();
   const [activeSection, setActiveSection] = useState('dashboard');
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
+  
+  // Local state to prevent "flash" of landing page during auth transition
+  const [isTransitioning, setIsTransitioning] = useState(true);
 
-  // This handles both the initial site load and the transition after login
-  if (isUserLoading) {
+  useEffect(() => {
+    if (!isUserLoading) {
+      // Add a tiny buffer to ensure the UI doesn't flip immediately before 
+      // the layout is ready to catch the auth state
+      const timer = setTimeout(() => setIsTransitioning(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isUserLoading]);
+
+  // While we are loading auth or in the transition buffer, show the loading screen
+  if (isUserLoading || isTransitioning) {
     return <Loading />;
   }
 
+  // If we have finished loading and there's no user, show landing
   if (!user) {
     return (
       <>
