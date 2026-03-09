@@ -1,0 +1,29 @@
+
+{
+  "placeholderImages": [
+    {
+      "id": "project-1",
+      "description": "A vintage typewriter on a dark desk",
+      "imageUrl": "https://picsum.photos/seed/script1/600/400",
+      "imageHint": "vintage typewriter"
+    },
+    {
+      "id": "project-2",
+      "description": "Modern office with a view of the city",
+      "imageUrl": "https://picsum.photos/seed/script2/600/400",
+      "imageHint": "modern office"
+    },
+    {
+      "id": "project-3",
+      "description": "Epic fantasy landscape with mountains",
+      "imageUrl": "https://picsum.photos/seed/script3/600/400",
+      "imageHint": "fantasy landscape"
+    },
+    {
+      "id": "character-avatar",
+      "description": "A silhouette of a mysterious person",
+      "imageUrl": "https://picsum.photos/seed/char1/200/200",
+      "imageHint": "silhouette portrait"
+    }
+  ]
+}
