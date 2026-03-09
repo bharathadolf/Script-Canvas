@@ -3,6 +3,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { SettingsProvider } from '@/lib/settings-context';
+import { ProjectProvider } from '@/lib/store';
 
 export const metadata: Metadata = {
   title: 'Script Canvas | Professional Screenwriting Workspace',
@@ -24,7 +25,9 @@ export default function RootLayout({
       <body className="font-body antialiased bg-background text-foreground">
         <FirebaseClientProvider>
           <SettingsProvider>
-            {children}
+            <ProjectProvider>
+              {children}
+            </ProjectProvider>
           </SettingsProvider>
         </FirebaseClientProvider>
       </body>

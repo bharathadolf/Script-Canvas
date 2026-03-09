@@ -2,43 +2,16 @@
 "use client";
 
 import React from 'react';
-import { Plus, MoreVertical, Calendar, User } from 'lucide-react';
+import { Plus, MoreVertical, Calendar, ScrollText } from 'lucide-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
-
-const projects = [
-  {
-    id: 1,
-    title: 'The Midnight Heist',
-    genre: 'Neo-Noir',
-    lastEdited: '2 hours ago',
-    image: 'https://picsum.photos/seed/script1/600/400',
-    progress: 45,
-    scenes: 24,
-  },
-  {
-    id: 2,
-    title: 'Chronicles of Aetheria',
-    genre: 'Fantasy',
-    lastEdited: 'Yesterday',
-    image: 'https://picsum.photos/seed/script3/600/400',
-    progress: 12,
-    scenes: 156,
-  },
-  {
-    id: 3,
-    title: 'Neon Pulse',
-    genre: 'Cyberpunk',
-    lastEdited: '3 days ago',
-    image: 'https://picsum.photos/seed/script2/600/400',
-    progress: 89,
-    scenes: 52,
-  }
-];
+import { useProjectStore } from '@/lib/store';
 
 export function ProjectDashboard({ onSelectProject }: { onSelectProject: (id: string) => void }) {
+  const { projects } = useProjectStore();
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className="flex items-center justify-between">
@@ -56,12 +29,12 @@ export function ProjectDashboard({ onSelectProject }: { onSelectProject: (id: st
           <Card 
             key={project.id} 
             className="group hover:border-primary/50 transition-all duration-300 cursor-pointer overflow-hidden border-border/40 bg-card/40"
-            onClick={() => onSelectProject(project.id.toString())}
+            onClick={() => onSelectProject(project.id)}
           >
             <div className="relative h-48 w-full">
               <Image 
                 src={project.image} 
-                alt={project.title} 
+                alt={project.name} 
                 fill 
                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                 data-ai-hint="cinematic scenery"
@@ -73,7 +46,7 @@ export function ProjectDashboard({ onSelectProject }: { onSelectProject: (id: st
             </div>
             <CardHeader className="pb-2">
               <div className="flex justify-between items-start">
-                <CardTitle className="text-xl group-hover:text-primary transition-colors">{project.title}</CardTitle>
+                <CardTitle className="text-xl group-hover:text-primary transition-colors">{project.name}</CardTitle>
                 <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
                   <MoreVertical className="w-4 h-4" />
                 </Button>
@@ -100,7 +73,7 @@ export function ProjectDashboard({ onSelectProject }: { onSelectProject: (id: st
             <CardFooter className="pt-0 border-t border-border/20 bg-muted/20 flex justify-between items-center px-6 py-3">
               <div className="flex items-center gap-1.5 text-xs text-primary/80">
                 <ScrollText className="w-3.5 h-3.5" />
-                <span>{project.scenes} Scenes</span>
+                <span>{project.scenes.length} Scenes</span>
               </div>
               <Button variant="link" className="p-0 h-auto text-primary text-xs font-bold">
                 Open Project
@@ -112,22 +85,3 @@ export function ProjectDashboard({ onSelectProject }: { onSelectProject: (id: st
     </div>
   );
 }
-
-const ScrollText = ({ className }: { className?: string }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    className={className}
-  >
-    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-    <path d="M10 9H8" />
-    <path d="M16 13H8" />
-    <path d="M16 17H8" />
-  </svg>
-);

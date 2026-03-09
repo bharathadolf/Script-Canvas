@@ -29,9 +29,11 @@ export type WorldElement = {
 export type Project = {
   id: string;
   name: string;
+  genre: string;
   description: string;
   lastEdited: string;
   image: string;
+  progress: number;
   scenes: Scene[];
   characters: Character[];
   worldElements: WorldElement[];
@@ -41,9 +43,11 @@ const DEFAULT_PROJECTS: Project[] = [
   {
     id: '1',
     name: 'The Midnight Heist',
+    genre: 'Neo-Noir',
     description: 'A neo-noir thriller set in the neon-soaked streets of futuristic Tokyo.',
     lastEdited: '2 hours ago',
     image: 'https://picsum.photos/seed/script1/600/400',
+    progress: 45,
     scenes: [
       { id: 's1', title: 'Int. Vault - Night', type: 'slugline', content: 'INT. HIGH TECH VAULT - NIGHT', order: 1 },
       { id: 's2', title: 'Action: Darkness', type: 'action', content: 'Darkness. The only sound is a rhythmic electronic pulse.', order: 2 },
@@ -60,9 +64,23 @@ const DEFAULT_PROJECTS: Project[] = [
   {
     id: '2',
     name: 'Chronicles of Aetheria',
+    genre: 'Fantasy',
     description: 'An epic fantasy saga about the last floating island in a world of endless clouds.',
     lastEdited: '1 day ago',
     image: 'https://picsum.photos/seed/script3/600/400',
+    progress: 12,
+    scenes: [],
+    characters: [],
+    worldElements: []
+  },
+  {
+    id: '3',
+    name: 'Neon Pulse',
+    genre: 'Cyberpunk',
+    description: 'A fast-paced journey through a virtual reality that has become too real.',
+    lastEdited: '3 days ago',
+    image: 'https://picsum.photos/seed/script2/600/400',
+    progress: 89,
     scenes: [],
     characters: [],
     worldElements: []

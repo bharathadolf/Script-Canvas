@@ -13,12 +13,13 @@ import { ProfileEditor } from '@/components/characters/ProfileEditor';
 import { LandingPage } from '@/components/home/LandingPage';
 import { Toaster } from '@/components/ui/toaster';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useProjectStore } from '@/lib/store';
 import Loading from './loading';
 
 export default function Home() {
   const { user, isUserLoading } = useUser();
+  const { selectProject } = useProjectStore();
   const [activeSection, setActiveSection] = useState('dashboard');
-  const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
 
   // Determine auth state as fast as possible
   if (isUserLoading) {
@@ -36,7 +37,7 @@ export default function Home() {
   }
 
   const handleSelectProject = (id: string) => {
-    setCurrentProjectId(id);
+    selectProject(id);
     setActiveSection('editor');
   };
 
