@@ -13,7 +13,7 @@ import { ProfileEditor } from '@/components/characters/ProfileEditor';
 import { LandingPage } from '@/components/home/LandingPage';
 import { Toaster } from '@/components/ui/toaster';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useProjectStore } from '@/lib/store';
+import { useProjectStore } from '@/lib/store.tsx';
 import Loading from './loading';
 
 export default function Home() {
@@ -21,12 +21,10 @@ export default function Home() {
   const { selectProject } = useProjectStore();
   const [activeSection, setActiveSection] = useState('dashboard');
 
-  // Determine auth state as fast as possible
   if (isUserLoading) {
     return <Loading />;
   }
 
-  // If no user is authenticated, show the Landing Page
   if (!user) {
     return (
       <>
@@ -42,7 +40,6 @@ export default function Home() {
   };
 
   const renderContent = () => {
-    // Helper to wrap project-specific views with the side panel tools (Muse AI & Details)
     const wrapInWorkspace = (content: React.ReactNode) => (
       <ProjectWorkspace>{content}</ProjectWorkspace>
     );

@@ -3,7 +3,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { SettingsProvider } from '@/lib/settings-context';
-import { ProjectProvider } from '@/lib/store';
+import { ProjectProvider } from '@/lib/store.tsx';
 
 export const metadata: Metadata = {
   title: 'Script Canvas | Professional Screenwriting Workspace',

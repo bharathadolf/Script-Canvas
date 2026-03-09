@@ -37,7 +37,8 @@ import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { useSettings, WritingFont } from '@/lib/settings-context';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useProjectStore } from '@/lib/store';
+import { useProjectStore } from '@/lib/store.tsx';
+import { Badge } from '@/components/ui/badge';
 
 type SidebarItemProps = {
   icon: React.ElementType;
@@ -101,7 +102,6 @@ export function AppLayout({
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      {/* Column 1: Navigation Sidebar */}
       <aside className={cn(
         "w-64 border-r bg-card/50 backdrop-blur-sm flex flex-col shrink-0 transition-all duration-500",
         isFocusActive ? "-ml-64 opacity-0 pointer-events-none" : "ml-0 opacity-100"
@@ -194,7 +194,6 @@ export function AppLayout({
         </div>
       </aside>
 
-      {/* Column 2: Main Content Area */}
       <main className="flex-1 flex flex-col relative bg-background overflow-hidden">
         <header className={cn(
           "h-16 border-b flex items-center justify-between px-8 bg-card/20 sticky top-0 z-10 transition-all duration-500",
@@ -234,13 +233,11 @@ export function AppLayout({
             </Button>
           </div>
         </header>
-        {/* Main Content Viewport */}
         <div className="flex-1 overflow-hidden relative">
           {children}
         </div>
       </main>
 
-      {/* Settings Dialog */}
       <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
         <DialogContent className="max-w-3xl bg-card border-border/40">
           <DialogHeader>
@@ -304,7 +301,6 @@ export function AppLayout({
                       </div>
                     </div>
                   </div>
-                  
                   <div className="p-4 bg-primary/5 rounded-xl border border-primary/20 flex items-start gap-3">
                     <Cloud className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                     <div>
@@ -409,17 +405,5 @@ export function AppLayout({
         </DialogContent>
       </Dialog>
     </div>
-  );
-}
-
-function Badge({ children, variant = "default", className }: { children: React.ReactNode, variant?: "default" | "outline", className?: string }) {
-  return (
-    <span className={cn(
-      "px-2 py-0.5 rounded-full font-bold uppercase tracking-widest",
-      variant === "default" ? "bg-primary text-primary-foreground" : "border border-border text-muted-foreground",
-      className
-    )}>
-      {children}
-    </span>
   );
 }

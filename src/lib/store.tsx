@@ -1,8 +1,10 @@
-
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
+/**
+ * Data types for the Script Canvas store.
+ */
 export type Scene = {
   id: string;
   title: string;
@@ -39,7 +41,7 @@ export type Project = {
   worldElements: WorldElement[];
 };
 
-const DEFAULT_PROJECTS: Project[] = [
+export const DEFAULT_PROJECTS: Project[] = [
   {
     id: '1',
     name: 'The Midnight Heist',
