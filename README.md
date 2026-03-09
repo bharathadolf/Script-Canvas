@@ -1,40 +1,41 @@
 # Script Canvas
 
-A professional, multi-dimensional workspace for screenwriters and story architects.
+Script Canvas is a professional, multi-dimensional workspace designed for screenwriters and story architects. It moves beyond linear text editing to provide a holistic environment where characters, world-building, and narrative structure converge.
 
-## 🚀 GitHub Setup
+## 🌟 Vision
 
-To push this project to your repository at `https://github.com/bharathadolf/script-canvas`, run these commands in your terminal:
+In traditional screenwriting software, your story is often confined to a single document. Script Canvas breaks this mold by offering a suite of integrated tools that allow writers to manage every facet of their creative vision in one unified, aesthetically pleasing interface.
 
-1. **Initialize and Commit:**
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit: Script Canvas workspace"
-   ```
+## ✨ Key Features
 
-2. **Link to GitHub:**
-   ```bash
-   git remote add origin https://github.com/bharathadolf/script-canvas.git
-   ```
+### 🖋️ Dynamic Workspace
+- **Script Editor**: A focused, distraction-free environment for drafting scenes with industry-standard formatting.
+- **Scene Manager**: Reorganize your story beats visually using drag-and-drop scene cards.
+- **Plot Timeline**: Visualize your narrative arc and track key plot points across Acts.
 
-3. **Deploy to Main:**
-   ```bash
-   git branch -M main
-   git push -u origin main
-   ```
+### 📖 Story Bible
+- **Character Profiles**: Build deep, complex personas for your cast, tracking their motivations, backstories, and archetypes.
+- **World Compendium**: Maintain a detailed "wiki" of locations, lore, and significant items to ensure internal consistency.
 
-## ✨ Features
+### 🤖 The Muse (AI Assistant)
+- Powered by **Google Genkit (Gemini 2.5 Flash)**, The Muse acts as your creative partner.
+- Generate suggestions for character traits, mysterious locations, or cryptic dialogue when you hit a creative block.
 
-- **Dynamic Workspace**: Interactive Script Editor, Scene Manager, and Timeline View.
-- **Story Bible**: Centralized character and world-building profiles.
-- **The Muse (AI)**: GenAI-powered creative assistant.
-- **Zen Mode**: Focus Mode for distraction-free writing.
-- **Cloud Sync**: Firebase-backed persistence.
+### 🧘 Zen Mode
+- Activate **Focus Mode** to hide all UI elements except for your script, allowing you to reach a deep flow state.
+- Choose between modern sans-serif or classic typewriter fonts to suit your writing style.
+
+### ☁️ Cloud Sync
+- Built on **Firebase**, your work is automatically synchronized and backed up, ensuring your scripts are accessible and secure.
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
-- **Styling**: Tailwind CSS & ShadCN UI
-- **Backend**: Firebase Authentication & Firestore
-- **AI**: Google Genkit (Gemini 2.5 Flash)
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [ShadCN UI](https://ui.shadcn.com/)
+- **Backend**: [Firebase Authentication](https://firebase.google.com/docs/auth) & [Cloud Firestore](https://firebase.google.com/docs/firestore)
+- **AI Integration**: [Google Genkit](https://github.com/firebase/genkit)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+---
+
+*Designed for those who don't just write scripts, but architect worlds.*
