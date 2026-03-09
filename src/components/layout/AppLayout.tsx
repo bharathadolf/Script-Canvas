@@ -37,6 +37,7 @@ import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { useSettings, WritingFont } from '@/lib/settings-context';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useProjectStore } from '@/lib/store';
 
 type SidebarItemProps = {
   icon: React.ElementType;
@@ -79,6 +80,7 @@ export function AppLayout({
   const auth = useAuth();
   const { user } = useUser();
   const { settings, updateSettings } = useSettings();
+  const { activeProject } = useProjectStore();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [activeSettingsTab, setActiveSettingsTab] = useState<'profile' | 'appearance' | 'notifications' | 'security'>('profile');
 
@@ -87,6 +89,15 @@ export function AppLayout({
   };
 
   const isFocusActive = settings.focusMode && activeSection === 'editor';
+
+  const sectionLabels: Record<string, string> = {
+    dashboard: 'Library',
+    editor: 'Script Editor',
+    scenes: 'Scene Manager',
+    timeline: 'Timeline',
+    characters: 'Characters',
+    world: 'World Building'
+  };
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -202,7 +213,17 @@ export function AppLayout({
             )}
             <span className="text-muted-foreground text-sm">Project</span>
             <ChevronRight className="w-3 h-3 text-muted-foreground" />
-            <span className="font-medium text-sm text-primary">The Midnight Heist</span>
+            <span className="font-medium text-sm text-primary">
+              {activeProject ? activeProject.name : 'Select Project'}
+            </span>
+            {activeProject && (
+              <>
+                <ChevronRight className="w-3 h-3 text-muted-foreground" />
+                <span className="font-medium text-sm text-muted-foreground">
+                  {sectionLabels[activeSection] || 'Overview'}
+                </span>
+              </>
+            )}
           </div>
           <div className="flex items-center gap-4">
             <Button variant="outline" size="sm" className="text-xs border-primary/50 text-primary hover:bg-primary/10">
