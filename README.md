@@ -4,7 +4,7 @@ Script Canvas is a professional, multi-dimensional workspace designed for screen
 
 ## 🖼️ Preview
 
-![Script Canvas Homepage Preview](public/docs/home-screenshot.png)
+![Script Canvas Homepage Preview Video](public/docs/home-preview.webp)
 _The Script Canvas landing page, featuring a sleek, dark-themed UI tailored for writers. It showcases a premium design with a central value proposition: "The Canvas for Masterpieces", and a secure access portal for both new and existing "architects of story"._
 
 ## 🌟 Vision
