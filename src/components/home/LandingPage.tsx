@@ -222,9 +222,9 @@ export function LandingPage() {
             © 2024 SCRIPT CANVAS INTERNATIONAL. FOR ARCHITECTS OF STORY.
           </p>
           <div className="flex gap-6">
-            <footerLink label="Privacy" />
-            <footerLink label="Terms" />
-            <footerLink label="API" />
+            <FooterLink label="Privacy" />
+            <FooterLink label="Terms" />
+            <FooterLink label="API" />
           </div>
         </div>
       </footer>
@@ -241,7 +241,7 @@ function Stat({ label, value }: { label: string, value: string }) {
   );
 }
 
-function footerLink({ label }: { label: string }) {
+function FooterLink({ label }: { label: string }) {
   return (
     <button className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
       {label}
