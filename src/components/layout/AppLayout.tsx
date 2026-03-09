@@ -143,20 +143,22 @@ export function AppLayout({
           <div className="bg-muted/50 rounded-xl p-4 border border-border/50">
             <div className="flex items-center gap-2 text-primary mb-2 px-4">
               <span className="text-[10px] font-bold uppercase tracking-wider truncate max-w-[120px]">
-                {user?.email || 'Authenticated'}
+                {user?.isAnonymous ? 'Guest Architect' : (user?.email || 'Authenticated')}
               </span>
             </div>
-            <SidebarItem 
-              icon={Settings} 
-              label="Settings" 
-              onClick={() => setIsSettingsOpen(true)} 
-            />
-            <SidebarItem 
-              icon={LogOut} 
-              label="Sign Out" 
-              variant="danger" 
-              onClick={handleSignOut} 
-            />
+            <div className="space-y-1">
+              <SidebarItem 
+                icon={Settings} 
+                label="Settings" 
+                onClick={() => setIsSettingsOpen(true)} 
+              />
+              <SidebarItem 
+                icon={LogOut} 
+                label="Sign Out" 
+                variant="danger" 
+                onClick={handleSignOut} 
+              />
+            </div>
           </div>
           <div className="bg-primary/5 rounded-xl p-4 border border-primary/10">
             <div className="flex items-center gap-2 text-primary mb-2">
@@ -231,18 +233,16 @@ export function AppLayout({
                 <div className="grid gap-4 p-4 rounded-xl bg-muted/20 border">
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="text-sm font-medium">Email Address</p>
-                      <p className="text-xs text-muted-foreground">{user?.email || 'Not provided'}</p>
+                      <p className="text-sm font-medium">Account Type</p>
+                      <p className="text-xs text-muted-foreground">{user?.isAnonymous ? 'Guest Scribe' : 'Professional Member'}</p>
                     </div>
-                    <Button variant="outline" size="sm" className="h-8 text-xs">Update</Button>
                   </div>
                   <Separator />
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="text-sm font-medium">Display Name</p>
-                      <p className="text-xs text-muted-foreground">{user?.displayName || 'Anonymous Scribe'}</p>
+                      <p className="text-sm font-medium">Identifier</p>
+                      <p className="text-xs text-muted-foreground truncate max-w-[200px]">{user?.email || user?.uid}</p>
                     </div>
-                    <Button variant="outline" size="sm" className="h-8 text-xs">Edit</Button>
                   </div>
                 </div>
               </div>
