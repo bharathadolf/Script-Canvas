@@ -8,7 +8,7 @@ import {
   Users, 
   Globe, 
   LayoutDashboard, 
-  Settings, 
+  Settings as SettingsIcon, 
   ChevronRight, 
   Clock, 
   Sparkles,
@@ -17,7 +17,10 @@ import {
   User,
   Shield,
   Bell,
-  Palette
+  Palette,
+  Eye,
+  EyeOff,
+  Type
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -31,6 +34,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { useSettings, WritingFont } from '@/lib/settings-context';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type SidebarItemProps = {
   icon: React.ElementType;
@@ -72,16 +78,22 @@ export function AppLayout({
 }) {
   const auth = useAuth();
   const { user } = useUser();
+  const { settings, updateSettings } = useSettings();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const handleSignOut = () => {
     signOut(auth);
   };
 
+  const isFocusActive = settings.focusMode && activeSection === 'editor';
+
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Column 1: Navigation Sidebar */}
-      <aside className="w-64 border-r bg-card/50 backdrop-blur-sm flex flex-col shrink-0">
+      <aside className={cn(
+        "w-64 border-r bg-card/50 backdrop-blur-sm flex flex-col shrink-0 transition-all duration-500",
+        isFocusActive ? "-ml-64 opacity-0 pointer-events-none" : "ml-0 opacity-100"
+      )}>
         <div className="p-6">
           <div className="flex items-center gap-2 mb-8">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
@@ -145,7 +157,7 @@ export function AppLayout({
             </div>
             <div className="space-y-1">
               <SidebarItem 
-                icon={Settings} 
+                icon={SettingsIcon} 
                 label="Settings" 
                 onClick={() => setIsSettingsOpen(true)} 
               />
@@ -169,8 +181,21 @@ export function AppLayout({
 
       {/* Column 2: Main Content Area */}
       <main className="flex-1 flex flex-col relative bg-background overflow-hidden">
-        <header className="h-16 border-b flex items-center justify-between px-8 bg-card/20 sticky top-0 z-10">
+        <header className={cn(
+          "h-16 border-b flex items-center justify-between px-8 bg-card/20 sticky top-0 z-10 transition-all duration-500",
+          isFocusActive ? "opacity-30 hover:opacity-100" : "opacity-100"
+        )}>
           <div className="flex items-center gap-3">
+            {isFocusActive && (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="mr-2 text-primary" 
+                onClick={() => updateSettings({ focusMode: false })}
+              >
+                <EyeOff className="w-4 h-4" />
+              </Button>
+            )}
             <span className="text-muted-foreground text-sm">Project</span>
             <ChevronRight className="w-3 h-3 text-muted-foreground" />
             <span className="font-medium text-sm text-primary">The Midnight Heist</span>
@@ -195,7 +220,7 @@ export function AppLayout({
         <DialogContent className="max-w-2xl bg-card border-border/40">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-primary flex items-center gap-2">
-              <Settings className="w-6 h-6" /> Studio Settings
+              <SettingsIcon className="w-6 h-6" /> Studio Settings
             </DialogTitle>
             <DialogDescription>
               Configure your writing environment and account preferences.
@@ -242,12 +267,42 @@ export function AppLayout({
                 <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Editor Preferences</h3>
                 <div className="grid gap-4 p-4 rounded-xl bg-muted/20 border">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">Auto-save interval</p>
-                    <span className="text-xs font-bold text-primary">Every 30s</span>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium">Focus Mode</p>
+                      <p className="text-[10px] text-muted-foreground italic">Hides sidebars while editing scripts.</p>
+                    </div>
+                    <Switch 
+                      checked={settings.focusMode} 
+                      onCheckedChange={(val) => updateSettings({ focusMode: val })} 
+                    />
                   </div>
+                  <Separator />
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-medium">Focus Mode</p>
-                    <Button variant="outline" size="sm" className="h-8 text-xs bg-primary/10 text-primary border-primary/20">Enabled</Button>
+                    <div className="space-y-0.5">
+                      <p className="text-sm font-medium">Writing Font</p>
+                      <p className="text-[10px] text-muted-foreground italic">Choose your preferred script typeface.</p>
+                    </div>
+                    <Select 
+                      value={settings.writingFont} 
+                      onValueChange={(val: WritingFont) => updateSettings({ writingFont: val })}
+                    >
+                      <SelectTrigger className="w-[140px] h-8 text-xs">
+                        <SelectValue placeholder="Select Font" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="sans">Modern Sans</SelectItem>
+                        <SelectItem value="serif">Classic Serif</SelectItem>
+                        <SelectItem value="mono">Typewriter Mono</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <p className="text-sm font-medium">Auto-save</p>
+                    <Switch 
+                      checked={settings.autoSave} 
+                      onCheckedChange={(val) => updateSettings({ autoSave: val })} 
+                    />
                   </div>
                 </div>
               </div>
