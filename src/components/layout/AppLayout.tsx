@@ -21,7 +21,6 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth, useUser } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import {
@@ -66,12 +65,10 @@ export function AppLayout({
   children, 
   activeSection, 
   setActiveSection, 
-  contextPanel 
 }: { 
   children: React.ReactNode;
   activeSection: string;
   setActiveSection: (s: string) => void;
-  contextPanel?: React.ReactNode;
 }) {
   const auth = useAuth();
   const { user } = useUser();
@@ -165,13 +162,13 @@ export function AppLayout({
               <Sparkles className="w-3 h-3" />
               <span className="text-[10px] font-bold uppercase tracking-wider">AI Muse Ready</span>
             </div>
-            <p className="text-[11px] text-muted-foreground leading-relaxed">Consult the context panel for suggestions.</p>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">Contextual AI tools available in your workspace.</p>
           </div>
         </div>
       </aside>
 
-      {/* Column 2: Main Content / Editor Area */}
-      <main className="flex-1 flex flex-col relative bg-background">
+      {/* Column 2: Main Content Area */}
+      <main className="flex-1 flex flex-col relative bg-background overflow-hidden">
         <header className="h-16 border-b flex items-center justify-between px-8 bg-card/20 sticky top-0 z-10">
           <div className="flex items-center gap-3">
             <span className="text-muted-foreground text-sm">Project</span>
@@ -187,17 +184,11 @@ export function AppLayout({
             </Button>
           </div>
         </header>
-        <ScrollArea className="flex-1">
-          <div className="p-8 max-w-5xl mx-auto w-full">
-            {children}
-          </div>
-        </ScrollArea>
+        {/* Main Content Viewport */}
+        <div className="flex-1 overflow-hidden relative">
+          {children}
+        </div>
       </main>
-
-      {/* Column 3: Contextual Info Panel */}
-      <aside className="w-80 border-l bg-card/30 backdrop-blur-md flex flex-col shrink-0 overflow-hidden">
-        {contextPanel}
-      </aside>
 
       {/* Settings Dialog */}
       <Dialog open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
