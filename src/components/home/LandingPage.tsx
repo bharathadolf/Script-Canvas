@@ -1,12 +1,11 @@
-
 "use client";
 
 import React, { useState } from 'react';
-import { PenTool, Sparkles, ScrollText, Users, Globe, ArrowRight } from 'lucide-react';
+import { PenTool, Sparkles, ScrollText, Users, Globe, ArrowRight, UserCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
-import { useAuth, initiateEmailSignIn, initiateEmailSignUp } from '@/firebase';
+import { useAuth, initiateEmailSignIn, initiateEmailSignUp, initiateAnonymousSignIn } from '@/firebase';
 import { toast } from '@/hooks/use-toast';
 
 export function LandingPage() {
@@ -16,7 +15,7 @@ export function LandingPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) return;
     
@@ -37,8 +36,13 @@ export function LandingPage() {
     }
   };
 
+  const handleDemoLogin = () => {
+    setIsLoading(true);
+    initiateAnonymousSignIn(auth);
+  };
+
   return (
-    <div className="min-h-screen bg-background text-foreground selection:bg-primary/30">
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary/30 overflow-x-hidden">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 border-b bg-background/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -81,7 +85,8 @@ export function LandingPage() {
           </div>
 
           <div className="animate-in fade-in slide-in-from-right-8 duration-1000 delay-200">
-            <Card className="bg-card/40 border-border/40 backdrop-blur-xl shadow-2xl">
+            <Card className="bg-card/40 border-border/40 backdrop-blur-xl shadow-2xl overflow-hidden relative">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary animate-pulse" />
               <CardContent className="p-8">
                 <h2 className="text-2xl font-bold mb-6">
                   {isLogin ? 'Welcome Back' : 'Create Your Studio'}
@@ -92,9 +97,10 @@ export function LandingPage() {
                     <Input 
                       type="email" 
                       placeholder="scribe@writer.com" 
-                      className="bg-background/50"
+                      className="bg-background/50 border-border/60"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      required
                     />
                   </div>
                   <div className="space-y-2">
@@ -102,19 +108,40 @@ export function LandingPage() {
                     <Input 
                       type="password" 
                       placeholder="••••••••" 
-                      className="bg-background/50"
+                      className="bg-background/50 border-border/60"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
                   </div>
-                  <Button className="w-full h-12 bg-primary text-primary-foreground font-bold text-md gap-2" disabled={isLoading}>
+                  <Button type="submit" className="w-full h-12 bg-primary text-primary-foreground font-bold text-md gap-2" disabled={isLoading}>
                     {isLoading ? 'Processing...' : (isLogin ? 'Enter Workspace' : 'Get Started Free')}
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </form>
+
+                <div className="relative my-6">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-border/40" />
+                  </div>
+                  <div className="relative flex justify-center text-xs uppercase">
+                    <span className="bg-card/40 px-2 text-muted-foreground font-bold tracking-widest">Or</span>
+                  </div>
+                </div>
+
+                <Button 
+                  onClick={handleDemoLogin}
+                  variant="outline" 
+                  className="w-full h-12 border-primary/40 text-primary hover:bg-primary/10 font-bold gap-2"
+                  disabled={isLoading}
+                >
+                  <UserCircle className="w-4 h-4" />
+                  Try Instant Demo
+                </Button>
+
                 <div className="mt-6 text-center">
-                  <p className="text-xs text-muted-foreground italic">
-                    By entering, you agree to our Terms of Service.
+                  <p className="text-[10px] text-muted-foreground italic uppercase tracking-widest">
+                    Authorized Studio Access Only
                   </p>
                 </div>
               </CardContent>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from 'react';
@@ -19,6 +18,7 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
 
+  // This handles both the initial site load and the transition after login
   if (isUserLoading) {
     return <Loading />;
   }
